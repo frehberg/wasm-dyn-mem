@@ -7,10 +7,15 @@ authors = ["Frank Rehberger <frehberg@gmail.com>"]
 panic = "abort"
 
 [profile.release]
-panic = "abort"
-debug = false
-lto = true
 opt-level = 's'
+debug = false
+rpath = false
+lto = false
+debug-assertions = false
+codegen-units = 16
+panic = 'abort'
+incremental = false
+overflow-checks = false
 
 [dependencies]
 wee_alloc = "0.4.2"
