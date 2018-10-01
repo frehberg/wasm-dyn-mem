@@ -8,6 +8,8 @@
 extern crate alloc;
 extern crate wee_alloc;
 
+use alloc::boxed::Box;
+
 // Use `wee_alloc` as the global allocator.
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
@@ -35,25 +37,17 @@ pub extern "C" fn oom(_: ::core::alloc::Layout) -> ! {
 
 #[start]
 fn start(_argc: isize, _argv: *const *const u8) -> isize {
-    0
+unsafe {
+  let appname = _argv.offset(0);
+  let mut chunk: Box<[u8]> = Box::new([0; 10]);
+
+  let mut i:isize = 0;
+  for i in 0..6 {
+    chunk[i as usize] = **(appname.offset(i as isize)) ;
+  }
+  match &chunk[..6] {
+      b"foobar" => 1,
+       _ => 0
+    }
 }
-
-//fn main() {
- //   let appname = env::args()
- //       .nth(0)
- //       .unwrap();
-//
- //   let mut chunk = vec!['A'; 64*1024].into_boxed_slice();
- //   let mut i:usize = 0;
- //   for c in appname.chars() {
-//	chunk[i] = c ;
- //       i += 1;
- //   }
-
-   //println!("Hello, world! {:?}", chunk);
-
- //   ::std::process::exit(match chunk[..6] {
-  //     ['f', 'o', 'o', 'b', 'a', 'r'] => 1,
-  //     _ => 0
-  //  });
-//}
+}
