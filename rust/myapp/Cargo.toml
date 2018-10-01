@@ -1,0 +1,16 @@
+[package]
+name = "myapp"
+version = "0.1.0"
+authors = ["Frank Rehberger <frehberg@gmail.com>"]
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"
+debug = false
+lto = true
+opt-level = 's'
+
+[dependencies]
+wee_alloc = "0.4.2"
