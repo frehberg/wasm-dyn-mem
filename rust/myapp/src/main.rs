@@ -1,9 +1,14 @@
 #![no_std]
-#![feature(start)] 
-
+#![feature(start)]
 // Required to use the `alloc` crate and its types, the `abort` intrinsic, and a
 // custom panic handler.
-#![feature(alloc, core_intrinsics, panic_implementation, lang_items, alloc_error_handler)]
+#![feature(
+    alloc,
+    core_intrinsics,
+    panic_implementation,
+    lang_items,
+    alloc_error_handler
+)]
 
 extern crate alloc;
 extern crate wee_alloc;
@@ -37,17 +42,17 @@ pub extern "C" fn oom(_: ::core::alloc::Layout) -> ! {
 
 #[start]
 fn start(_argc: isize, _argv: *const *const u8) -> isize {
-unsafe {
-  let appname = _argv.offset(0);
-  let mut chunk: Box<[u8]> = Box::new([0; 10]);
+    unsafe {
+        let appname = _argv.offset(0);
+        let mut chunk: Box<[u8]> = Box::new([0; 10]);
 
-  let mut i:isize = 0;
-  for i in 0..6 {
-    chunk[i as usize] = **(appname.offset(i as isize)) ;
-  }
-  match &chunk[..6] {
-      b"foobar" => 1,
-       _ => 0
+        let mut i: isize = 0;
+        for i in 0..6 {
+            chunk[i as usize] = **(appname.offset(i as isize));
+        }
+        match &chunk[..6] {
+            b"foobar" => 1,
+            _ => 0,
+        }
     }
-}
 }
